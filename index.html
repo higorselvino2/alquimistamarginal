@@ -173,17 +173,52 @@
             filter: none;
         }
 
+        /* FIX: botão hambúrguer — só aparece no mobile (ver media query abaixo) */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 6px;
+            width: 34px;
+            height: 34px;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            z-index: 501;
+        }
+
+        .nav-toggle span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: var(--gold);
+            transition: transform 0.3s, opacity 0.3s, width 0.3s;
+        }
+
+        .nav-toggle span:nth-child(2) {
+            width: 70%;
+        }
+
+        .site-nav.menu-open .nav-toggle span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+            width: 100%;
+        }
+
+        .site-nav.menu-open .nav-toggle span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .site-nav.menu-open .nav-toggle span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+            width: 100%;
+        }
+
         .site-nav .nav-links {
             display: flex;
             align-items: center;
             gap: clamp(1rem, 3vw, 2rem);
-            overflow-x: auto;
-            scrollbar-width: none;
-            max-width: 80vw;
-        }
-
-        .site-nav .nav-links::-webkit-scrollbar {
-            display: none;
         }
 
         .site-nav .nav-links a {
@@ -198,6 +233,42 @@
 
         .site-nav .nav-links a:hover {
             color: var(--gold);
+        }
+
+        /* FIX: no mobile, a lista de links virava uma faixa horizontal apertada com
+           scroll escondido — "ARQUIVO" e "CONTATO" ficavam cortados/invisíveis.
+           Agora o hambúrguer abre um painel vertical em tela cheia. */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: flex;
+            }
+
+            .site-nav .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100svh;
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+                background: rgba(3, 3, 3, 0.97);
+                backdrop-filter: blur(10px);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-12px);
+                transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+            }
+
+            .site-nav .nav-links a {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+
+            .site-nav.menu-open .nav-links {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
         }
 
         /* FIX: Botão "voltar ao topo" com símbolo alquímico — some no hero, aparece
@@ -804,16 +875,46 @@
         }
 
         /* GALLERY MARQUEE */
-        .marquee-wrapper {
-            width: 110%;
+        /* FIX: antes .marquee-wrapper tinha overflow:hidden E transform:rotate() no
+           MESMO elemento — isso deixava a própria borda de recorte diagonal, sobrando
+           um triângulo de fundo preto visível numa das pontas (o "buraco" no mobile).
+           Agora o recorte reto fica no .marquee-outer (sem rotação) e o bloco de cor,
+           girado, é bem maior que a área visível — assim ele sempre cobre 100% da
+           largura, em qualquer altura de tela, sem depender de scroll horizontal
+           (a página já trava overflow-x no body, então esse "vazamento" controlado
+           nunca aparece). */
+        .marquee-outer {
+            width: 100%;
             overflow: hidden;
-            background: var(--gold);
-            padding: 1rem 0;
-            transform: rotate(-2deg);
-            margin: var(--space-l) 0;
             position: relative;
-            left: -5%;
+            margin: var(--space-l) 0;
+            height: clamp(76px, 13vw, 128px);
             z-index: 20;
+        }
+
+        .marquee-wrapper {
+            position: absolute;
+            top: 50%;
+            left: -25%;
+            width: 150%;
+            background: var(--gold);
+            padding: 3rem 0;
+        }
+
+        .marquee-wrapper.rotate-neg {
+            transform: translateY(-50%) rotate(-2deg);
+        }
+
+        .marquee-wrapper.rotate-pos {
+            transform: translateY(-50%) rotate(2deg);
+        }
+
+        .marquee-wrapper.marquee-orange {
+            background: var(--orange);
+        }
+
+        .marquee-outer.animation-paused .marquee {
+            animation-play-state: paused;
         }
 
         .marquee {
@@ -973,7 +1074,11 @@
         <a href="#top" class="nav-brand hover-trigger" data-cursor-text="TOPO" aria-label="Voltar ao topo">
             <img src="images/logo-branco.png" alt="Alquimista Marginal" width="38" height="38" loading="lazy">
         </a>
-        <nav class="nav-links" aria-label="Navegação principal">
+        <button type="button" class="nav-toggle hover-trigger" id="nav-toggle" data-cursor-text="MENU"
+            aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
             <a href="#institucional" class="hover-trigger" data-cursor-text="IR">QUEM SOMOS</a>
             <a href="#agenda" class="hover-trigger" data-cursor-text="IR">RITUAIS</a>
             <a href="#artistas" class="hover-trigger" data-cursor-text="IR">ARTISTAS</a>
@@ -999,16 +1104,18 @@
             </div>
         </section>
 
-        <div class="marquee-wrapper pause-out-of-view">
-            <div class="marquee">
-                <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
-                <span>A RUA COMO ORIGEM ✦</span>
-                <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
-                <span>A RUA COMO ORIGEM ✦</span>
-                <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
-                <span>A RUA COMO ORIGEM ✦</span>
-                <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
-                <span>A RUA COMO ORIGEM ✦</span>
+        <div class="marquee-outer pause-out-of-view">
+            <div class="marquee-wrapper rotate-neg">
+                <div class="marquee">
+                    <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+                    <span>A RUA COMO ORIGEM ✦</span>
+                    <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+                    <span>A RUA COMO ORIGEM ✦</span>
+                    <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+                    <span>A RUA COMO ORIGEM ✦</span>
+                    <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+                    <span>A RUA COMO ORIGEM ✦</span>
+                </div>
             </div>
         </div>
 
@@ -1188,12 +1295,14 @@
             </div>
         </section>
 
-        <div class="marquee-wrapper pause-out-of-view" style="transform: rotate(2deg); background: var(--orange);">
-            <div class="marquee">
-                <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
-                <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
-                <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
-                <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
+        <div class="marquee-outer pause-out-of-view">
+            <div class="marquee-wrapper rotate-pos marquee-orange">
+                <div class="marquee">
+                    <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
+                    <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
+                    <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
+                    <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
+                </div>
             </div>
         </div>
 
@@ -1492,6 +1601,41 @@
                 ticking = true;
             }
         });
+
+        // ==========================================
+        // MENU MOBILE (HAMBÚRGUER)
+        // ==========================================
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        if (navToggle && siteNav && navLinks) {
+            const closeMenu = () => {
+                siteNav.classList.remove('menu-open');
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('locked');
+            };
+            const openMenu = () => {
+                siteNav.classList.add('menu-open');
+                navToggle.setAttribute('aria-expanded', 'true');
+                document.body.classList.add('locked');
+            };
+
+            navToggle.addEventListener('click', () => {
+                siteNav.classList.contains('menu-open') ? closeMenu() : openMenu();
+            });
+
+            // Fecha o menu ao clicar em qualquer link (rola até a seção)
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            // Se a tela crescer para desktop com o menu aberto, fecha o painel mobile
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && siteNav.classList.contains('menu-open')) {
+                    closeMenu();
+                }
+            });
+        }
 
         // ==========================================
         // INTERSECTION OBSERVERS
