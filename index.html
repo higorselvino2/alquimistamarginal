@@ -68,14 +68,7 @@
             cursor: none !important;
         }
 
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
-        }
-
         html {
-            overflow-y: auto;
             scroll-behavior: smooth;
         }
 
@@ -84,6 +77,8 @@
             color: var(--text-main);
             font-family: var(--font-body);
             overscroll-behavior-y: none;
+            overflow-x: hidden;
+            width: 100%;
         }
         
         body.locked {
