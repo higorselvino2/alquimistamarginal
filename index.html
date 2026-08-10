@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALQUIMISTA MARGINAL | Ocupação Ritualística</title>
+    <meta name="description" content="A rua não é apenas referência estética, mas origem, método e território de criação.">
+    
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #030303;
+            --bg-alt: #0a0a0a;
+            --text-main: #d9d9d9;
+            --text-muted: #888;
+            --gold: #D4AF37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --orange: #C85A17;
+            --orange-glow: rgba(200, 90, 23, 0.4);
+            
+            --font-display: 'Anton', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            
+            --space-s: clamp(1rem, 3vw, 2rem);
+            --space-m: clamp(2rem, 5vw, 4rem);
+            --space-l: clamp(4rem, 10vw, 8rem);
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor everywhere */
+        }
+
+        html, body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        ::selection {
+            background: var(--gold);
+            color: var(--bg-deep);
+        }
+
+        /* CUSTOM CURSOR - THIN RING */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            background-color: transparent;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+            mix-blend-mode: difference;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 10px;
+            color: var(--bg-deep);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        #custom-cursor.hover {
+            width: 80px;
+            height: 80px;
+            background-color: var(--orange);
+            border-color: var(--orange);
+            mix-blend-mode: normal;
+        }
+        #custom-cursor.hover::after {
+            content: "ENTRAR";
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, h4, .manifesto {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+
+        .manifesto {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--gold);
+            display: block;
+            margin: var(--space-m) 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .manifesto.alt {
+            color: var(--bg-deep);
+            -webkit-text-stroke: 1px var(--gold);
+        }
+
+        .text-block {
+            font-size: clamp(1rem, 1.2vw + 0.5rem, 1.2rem);
+            line-height: 1.5;
+            max-width: 600px;
+            margin-bottom: var(--space-s);
+            border-left: 2px solid var(--orange);
+            padding-left: 1rem;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* LAYOUT & ASYMMETRY */
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 var(--space-s);
+            position: relative;
+        }
+
+        .section {
+            padding: var(--space-l) 0;
+            position: relative;
+        }
+
+        .grid-split {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-m);
+            align-items: center;
+        }
+
+        @media(min-width: 900px) {
+            .grid-split {
+                grid-template-columns: repeat(12, 1fr);
+            }
+            .grid-split > *:nth-child(1) { grid-column: 1 / 7; }
+            .grid-split > *:nth-child(2) { grid-column: 7 / -1; }
+            
+            .grid-split.offset > *:nth-child(1) { grid-column: 2 / 8; }
+            .grid-split.offset > *:nth-child(2) { grid-column: 7 / 12; margin-top: 10vh; }
+            
+            .grid-split.reverse > *:nth-child(1) { grid-column: 7 / -1; }
+            .grid-split.reverse > *:nth-child(2) { grid-column: 1 / 7; grid-row: 1; }
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            filter: grayscale(100%) contrast(1.3);
+        }
+        
+        /* OVERLAPPING LOGO BG */
+        .bg-logo {
+            position: absolute;
+            opacity: 0.05;
+            pointer-events: none;
+            width: 60vw;
+            max-width: 800px;
+            z-index: 0;
+            animation: rotateSlow 60s linear infinite;
+        }
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* REVEAL ANIMATIONS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px) rotate(2deg) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) rotate(0) scale(1);
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background-image: url('images/DSC01805.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) contrast(1.5);
+            opacity: 0.6;
+            z-index: 1;
+            /* Parallax target */
+            will-change: transform;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            mix-blend-mode: difference;
+        }
+        .hero-logo {
+            width: clamp(100px, 20vw, 250px);
+            margin: 0 auto var(--space-s);
+            filter: invert(1);
+        }
+        .hero h1 {
+            font-size: clamp(4rem, 15vw, 12rem);
+            color: #fff;
+            margin-bottom: -1rem;
+        }
+
+        /* QUEM SOMOS */
+        .about-images {
+            position: relative;
+            height: 60vh;
+        }
+        .about-images img {
+            position: absolute;
+            box-shadow: 15px 15px 0 var(--gold);
+        }
+        .about-images img:nth-child(1) {
+            width: 80%;
+            top: 0;
+            left: 0;
+            transform: rotate(-3deg);
+            z-index: 2;
+        }
+        .about-images img:nth-child(2) {
+            width: 60%;
+            bottom: -50px;
+            right: 0;
+            transform: rotate(5deg);
+            z-index: 1;
+            border: 4px solid var(--bg-deep);
+        }
+
+        /* CONVOCAÇÕES MANIFESTO GRID */
+        .convocacoes-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-l);
+            margin-top: var(--space-m);
+        }
+        
+        .convocacao-block {
+            display: flex;
+            align-items: center;
+        }
+        
+        .convocacao-block p {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: 1.1;
+            text-transform: uppercase;
+            color: var(--text-main);
+            margin: 0;
+            padding: var(--space-s);
+            border-left: 5px solid var(--orange);
+            background: rgba(255,255,255,0.02);
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+
+        .convocacao-block:nth-child(even) {
+            justify-content: flex-end;
+        }
+        
+        .convocacao-block:nth-child(even) p {
+            border-left: none;
+            border-right: 5px solid var(--gold);
+            text-align: right;
+            box-shadow: -10px 10px 0 rgba(0,0,0,0.5);
+        }
+        
+        .convocacao-block:hover p {
+            transform: scale(1.02);
+            color: var(--gold);
+        }
+
+        /* ARTISTAS */
+        .artista-foto {
+            position: relative;
+        }
+        .artista-foto::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100%;
+            height: 100%;
+            border: 5px solid var(--orange);
+            z-index: -1;
+            transition: transform 0.5s ease;
+        }
+        .artista-foto:hover::after {
+            transform: translate(10px, 10px);
+        }
+        .artista-foto img {
+            width: 100%;
+        }
+
+        /* PROJETOS */
+        .projeto-box {
+            background: var(--bg-alt);
+            padding: var(--space-m);
+            border: 1px dashed var(--text-muted);
+            position: relative;
+        }
+        .projeto-box:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+        .badge {
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background: var(--bg-deep);
+            padding: 0 1rem;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--gold);
+        }
+
+        /* YOUTUBE BLOCK */
+        .youtube-simple {
+            background: #0a0a0a;
+            border: 2px dashed #333;
+            padding: var(--space-l) var(--space-m);
+            text-align: center;
+            margin: var(--space-m) 0;
+            transition: border-color 0.3s;
+        }
+        .youtube-simple:hover {
+            border-color: var(--orange);
+        }
+        .youtube-simple h3 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: var(--text-muted);
+            margin-bottom: var(--space-s);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            border: 2px solid var(--gold);
+            padding: 1rem 2rem;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: color 0.3s;
+            background: transparent;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            z-index: -1;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            color: var(--bg-deep);
+        }
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid #333;
+            padding: var(--space-m) 0;
+            text-align: center;
+        }
+        .footer-logo {
+            width: 80px;
+            margin: 0 auto var(--space-s);
+            animation: rotateSlow 20s linear infinite;
+        }
+        .links a {
+            display: inline-block;
+            margin: 0 1rem;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            color: var(--orange);
+            text-shadow: 0 0 10px var(--orange-glow);
+        }
+
+        /* UTILS */
+        .text-huge { font-size: clamp(3rem, 6vw, 5rem); color: var(--gold); margin-bottom: 1rem; }
+        .rotate-left { transform: rotate(-2deg); }
+        .rotate-right { transform: rotate(2deg); }
+        .push-down { margin-top: 10vh; }
+
+        /* GALLERY MARQUEE */
+        .marquee-wrapper {
+            width: 100vw;
+            overflow: hidden;
+            background: var(--gold);
+            padding: 1rem 0;
+            transform: rotate(-2deg);
+            margin: var(--space-l) 0;
+            position: relative;
+            left: -5vw;
+            width: 110vw;
+            z-index: 20;
+        }
+        .marquee {
+            display: flex;
+            white-space: nowrap;
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--bg-deep);
+            text-transform: uppercase;
+            animation: scrollText 20s linear infinite;
+        }
+        .marquee span { margin-right: 2rem; }
+        @keyframes scrollText {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* MASONRY IMAGE GRID (EXTRA IMAGES) */
+        .masonry {
+            column-count: 2;
+            column-gap: 1rem;
+            margin-top: var(--space-m);
+        }
+        @media(min-width: 768px) { .masonry { column-count: 3; } }
+        .masonry img {
+            width: 100%;
+            margin-bottom: 1rem;
+            border: 2px solid #222;
+            transition: filter 0.3s, border-color 0.3s;
+        }
+        .masonry img:hover {
+            border-color: var(--gold);
+            filter: grayscale(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM CURSOR DIV -->
+    <div id="custom-cursor"></div>
+
+    <!-- HERO -->
+    <section class="hero hover-trigger">
+        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-content">
+            <img src="images/logo-branco.png" alt="Logo" class="hero-logo">
+            <h1 class="reveal">ALQUIMISTA<br>MARGINAL</h1>
+        </div>
+    </section>
+
+    <div class="marquee-wrapper">
+        <div class="marquee">
+            <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+            <span>A RUA COMO ORIGEM ✦</span>
+            <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+            <span>A RUA COMO ORIGEM ✦</span>
+            <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+            <span>A RUA COMO ORIGEM ✦</span>
+            <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
+            <span>A RUA COMO ORIGEM ✦</span>
+        </div>
+    </div>
+
+    <!-- QUEM SOMOS -->
+    <section class="section" id="institucional">
+        <img src="images/logo.png" class="bg-logo" style="top: 10%; right: -10%;">
+        <div class="container">
+            <div class="grid-split offset">
+                <div class="reveal">
+                    <span class="manifesto">A rua não é apenas referência estética, mas origem, método e território de criação.</span>
+                    <div class="text-block">
+                        A Alquimista Marginal é um projeto artístico-musical fundado em 2018, que atua na intersecção entre música, performance, espiritualidade urbana e cultura de rua. Seu trabalho desenvolve uma linguagem própria, onde rock, rap, house, literatura marginal e ritualidade contemporânea se fundem em experiências sensoriais e simbólicas.
+                    </div>
+                    <div class="text-block">
+                        Idealizado por Visão da Pandora (MC / DJ OURO) e Martin Memo (MC), o projeto nasce de forma totalmente underground, com o propósito de ativar e expandir a alquimia urbana como prática artística, cultural e coletiva.
+                    </div>
+                </div>
+                <div class="about-images reveal hover-trigger">
+                    <!-- Hands up photo + Live mic photo -->
+                    <img src="images/DSC01811.jpg" alt="Show Ao Vivo">
+                    <img src="images/979cb390-bc46-4eb4-9411-586b634c3060.png" alt="Presença">
+                </div>
+            </div>
+
+            <div class="grid-split reverse push-down">
+                <div class="reveal">
+                    <span class="manifesto alt">OCUPAÇÃO ARTÍSTICA.</span>
+                    <div class="text-block">
+                        A Alquimista Marginal não se limita a um formato fixo. Suas apresentações funcionam como ocupações artísticas, onde som, palavra, corpo e presença constroem atmosferas intensas, imersivas e impactantes. Cada aparição do projeto é pensada como um acontecimento, capaz de transformar o espaço e a percepção do público.
+                    </div>
+                </div>
+                <div class="reveal hover-trigger">
+                    <img src="images/e003b6f0-fde8-44e1-be4f-addebdecceff.png" alt="Atmosfera" style="box-shadow: -15px 15px 0 var(--orange); transform: rotate(2deg);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MANIFESTO: RITUAIS & CONVOCAÇÕES -->
+    <section class="section" id="agenda" style="background: var(--bg-alt); margin-top: var(--space-l);">
+        <div class="container">
+            <h2 class="text-huge reveal rotate-left">RITUAIS &<br>CONVOCAÇÕES</h2>
+            
+            <div class="convocacoes-grid">
+                <div class="convocacao-block reveal rotate-right hover-trigger">
+                    <p>"A rua não é apenas referência estética, mas origem, método e território de criação."</p>
+                </div>
+                <div class="convocacao-block reveal rotate-left hover-trigger">
+                    <p>"Suas apresentações funcionam como ocupações artísticas, onde som, palavra, corpo e presença constroem atmosferas intensas, imersivas e impactantes."</p>
+                </div>
+                <div class="convocacao-block reveal hover-trigger">
+                    <p>"Cada aparição do projeto é pensada como um acontecimento, capaz de transformar o espaço e a percepção do público."</p>
+                </div>
+                <div class="convocacao-block reveal rotate-right hover-trigger">
+                    <p>"No Cálice, não há hierarquia entre participantes: cada elemento, cada linguagem, cada presença é parte viva do rito coletivo."</p>
+                </div>
+            </div>
+            
+            <div class="reveal" style="text-align: center; margin-top: var(--space-m);">
+                <a href="https://instagram.com/alquimistamarginal" target="_blank" class="btn hover-trigger">Acompanhe no Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARTISTAS -->
+    <section class="section" id="artistas">
+        <img src="images/logo.png" class="bg-logo" style="top: 30%; left: -20%; opacity: 0.03;">
+        <div class="container">
+            
+            <!-- Visão da Pandora -->
+            <div class="grid-split push-down" style="margin-bottom: var(--space-l);">
+                <div class="artista-foto reveal hover-trigger">
+                    <!-- Foto corrigida -->
+                    <img src="images/088bdb35-2e4a-49ed-9d51-d3e72039dd07.png" alt="Visão da Pandora">
+                </div>
+                <div class="reveal">
+                    <h2 class="text-huge">VISÃO DA<br>PANDORA</h2>
+                    <span class="manifesto alt" style="font-size: 2.5rem; margin: 1rem 0;">CRIADORA DE EXPERIÊNCIAS E SIMBOLISMO.</span>
+                    <div class="text-block">
+                        Visão da Pandora é MC, DJ e produtora cultural. Nos projetos DJ Ouro e Alquimista Marginal, atua como MC e DJ, criando música que mistura Hip-hop, poesia falada e experimentação sonora. Cada beat e cada verso são carregados de presença, discurso urbano e identidade forte — som que não apenas entretém, mas conecta, provoca e marca.
+                    </div>
+                    <div class="text-block">
+                        Além da música, desenvolve atendimentos de Tarot e Matriz do Destino, experiências autorais que combinam leitura simbólica e análise de ciclos. Essa energia se materializa na sua loja natural, com produtos e ervas pensadas para o cuidado, ritual e cotidiano.
+                    </div>
+                </div>
+            </div>
+
+            <!-- DJ OURO -->
+            <div class="projeto-box reveal hover-trigger" style="max-width: 900px; margin: 0 auto var(--space-l);">
+                <div class="badge">DJ ∅UR∅</div>
+                <div class="grid-split" style="gap: 2rem;">
+                    <!-- Adicionando a imagem correta do projeto DJ Ouro -->
+                    <div class="artista-foto">
+                        <img src="images/0c13100d-52f9-4ba1-9ba1-b8be2a1843c6.png" alt="DJ Ouro">
+                    </div>
+                    <div class="text-block" style="border-left-color: var(--gold); max-width: 100%;">
+                        DJ ∅UR∅ é a persona sonora de Visão da Pandora, transformando pistas em experiências únicas. Misturando hip-hop, house e sets experimentais, cria uma atmosfera onde a rua encontra o palco. Como integrante do coletivo, ∅UR∅ conecta arte, resistência cultural e expressão de rua. Seus sets são reconhecidos por sua originalidade e capacidade de surpreender.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Martin Memo -->
+            <div class="grid-split reverse push-down">
+                <div class="artista-foto reveal hover-trigger rotate-left">
+                    <img src="images/felipebenici0_RAPHOUR_28NOV-8084.jpg" alt="Martin Memo">
+                </div>
+                <div class="reveal">
+                    <h2 class="text-huge" style="color: var(--orange);">MARTIN<br>MEMO</h2>
+                    <span class="manifesto alt" style="font-size: 2.5rem; margin: 1rem 0;">A VOZ DA RUA EM MOVIMENTO.</span>
+                    <div class="text-block">
+                        Martin Memo é MC, produtor artístico e figura atuante da cena hip‑hop independente, nascido e criado na Zona Leste de São Paulo. Seu som é plural: mistura rap com múltiplos estilos, transitando do rock ao house, sem perder a essência da rua.
+                    </div>
+                    <div class="text-block">
+                        Atualmente, Martin Memo está em fase de desenvolvimento do seu próximo EP, que promete aprofundar suas reflexões sobre identidade, território e experiência urbana, e também trabalha no lançamento de sua loja autoral, expandindo sua estética.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="marquee-wrapper" style="transform: rotate(2deg); background: var(--orange);">
+        <div class="marquee">
+            <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
+            <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
+            <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
+            <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
+        </div>
+    </div>
+
+    <!-- PROJETOS: QUERO ZINE E CALICE -->
+    <section class="section" style="background: var(--bg-alt);">
+        <div class="container">
+            
+            <!-- Quero Zine -->
+            <div class="grid-split" style="margin-bottom: var(--space-l);">
+                <div class="reveal">
+                    <img src="images/quero_zine_logo.png" alt="Quero Zine" style="height: 80px; filter: invert(1); margin-bottom: 2rem;">
+                    <span class="manifesto" style="font-size: 3rem; margin: 0 0 2rem 0;">O FANZINE COMO TECNOLOGIA SOCIAL E POLÍTICA.</span>
+                    <div class="text-block">
+                        O Quero Zine é um projeto editorial e formativo independente criado em 2018. Nascido do encontro entre poesia marginal, fanzine, rap e intervenção urbana, utiliza a publicação independente como ferramenta de expressão, formação e circulação de narrativas que historicamente não encontram espaço nos meios tradicionais.
+                    </div>
+                    <div class="text-block">
+                        As ações já passaram por escolas, Fundação Casa, ocupações artísticas e SESC. Mais do que uma publicação, o Quero Zine é um território de encontro.
+                    </div>
+                </div>
+                <div class="reveal hover-trigger rotate-right">
+                    <img src="images/zine_tela.jpg" alt="Zine e Crianças" style="box-shadow: 15px -15px 0 #fff;">
+                </div>
+            </div>
+
+            <!-- Cálice da Arte -->
+            <div class="grid-split reverse">
+                <div class="reveal">
+                    <h2 class="text-huge" style="color: var(--orange);">CÁLICE DA ARTE</h2>
+                    <span class="manifesto alt" style="font-size: 2.5rem; margin: 0 0 2rem 0;">ONDE A RUA SE ENCONTRA COM A ARTE.</span>
+                    <div class="text-block">
+                        O Cálice da Arte é um rolê de encontro da cultura hip-hop, reunindo os 4 elementos — MCs, DJs, breaking e graffiti — e seus subgêneros (sticker art, pixo, zines e moda). Mais do que um evento, é um espaço de convergência e troca.
+                    </div>
+                    <div class="text-block">
+                        O projeto valoriza o que é resistente ao tempo e às tendências, legitimando práticas urbanas muitas vezes ignoradas. Não há hierarquia entre participantes: cada elemento, cada linguagem, cada presença é parte viva do rito coletivo.
+                    </div>
+                </div>
+                <div class="reveal hover-trigger rotate-left">
+                    <!-- Utilizando o logo branco como elemento visual placeholder limpo, já que o cartaz foi movido pra galera visual -->
+                    <img src="images/logo-branco.png" alt="Cálice da Arte" style="width: 200px; margin: 0 auto; opacity: 0.5;">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- GALERIA DE PRESENÇA E CARTAZES (IMAGENS EXTRAS DA PASTA) -->
+    <section class="section">
+        <div class="container">
+            <h2 class="text-huge reveal">ARQUIVO / PRESENÇA</h2>
+            <div class="masonry reveal hover-trigger">
+                <!-- Todas as imagens excedentes e cartazes realocados para formar registro visual histórico -->
+                <img src="images/Design_sem_nome_(4).png" alt="Arquivo visual">
+                <img src="images/LLL.png" alt="Arquivo visual">
+                <img src="images/d0966068-1970-4af6-ba66-d4db78b0db05.png" alt="Soul Marginal Flyer">
+                <img src="images/730511083_18608973898031516_5972655244872701118_n.jpg" alt="Arquivo visual">
+                <img src="images/SnapInsta.to_541521025_17889789627342933_264079260889585532_n.jpg" alt="Arquivo visual">
+                <img src="images/741523998_18579084592067652_3312034726951573324_n.webp" alt="Arquivo visual">
+                <img src="images/766168917_17938163880342933_2041897178445232918_n.webp" alt="Arquivo visual">
+            </div>
+        </div>
+    </section>
+
+    <!-- YOUTUBE & CONTATO -->
+    <section class="section" style="background: var(--bg-alt);">
+        <div class="container text-center" style="text-align: center;">
+            <h2 class="text-huge reveal">SINTONIZE</h2>
+            
+            <div class="reveal" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: var(--space-m);">
+                <a href="https://www.youtube.com/@alquimistamarginal" target="_blank" class="btn hover-trigger">
+                    <svg style="width: 24px; height: 24px; vertical-align: middle; margin-right: 10px; fill: currentColor;" viewBox="0 0 24 24"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4s-6.254,0-7.814,0.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.746,20,12,20,12,20s6.254,0,7.814-0.418c0.86-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M9.999,15.595V8.405L16.273,12L9.999,15.595z"/></svg>
+                    Youtube
+                </a>
+                <a href="#" class="btn hover-trigger" style="border-color: var(--orange); color: var(--orange);">Merchandising</a>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container reveal">
+            <img src="images/logo.png" alt="Estrela 8 Pontas" class="footer-logo">
+            <div class="links" style="margin-bottom: 2rem;">
+                <a href="https://instagram.com/alquimistamarginal" class="hover-trigger" target="_blank">INSTAGRAM</a>
+                <a href="mailto:alquimistamarginal@gmail.com" class="hover-trigger">ALQUIMISTAMARGINAL@GMAIL.COM</a>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                ALQUIMISTA MARGINAL © 2026. A rua como método.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // ==========================================
+        // CUSTOM CURSOR LOGIC
+        // ==========================================
+        const cursor = document.getElementById('custom-cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        const setupHoverTriggers = () => {
+            const triggers = document.querySelectorAll('.hover-trigger, a, button');
+            triggers.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        };
+
+        // ==========================================
+        // PARALLAX EFFECT
+        // ==========================================
+        const heroBg = document.getElementById('hero-bg');
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            if(heroBg && scroll < window.innerHeight) {
+                heroBg.style.transform = `translateY(${scroll * 0.4}px)`;
+            }
+        });
+
+        // ==========================================
+        // INTERSECTION OBSERVER (REVEAL)
+        // ==========================================
+        const initReveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            });
+            reveals.forEach(r => observer.observe(r));
+        };
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            setupHoverTriggers();
+            initReveal();
+        });
+
+    </script>
+</body>
+</html>
