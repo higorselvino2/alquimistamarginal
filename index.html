@@ -68,8 +68,12 @@
             cursor: none !important;
         }
 
-        html {
+        html, body {
             overflow-x: hidden;
+            max-width: 100%;
+        }
+
+        html {
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -79,6 +83,7 @@
             color: var(--text-main);
             font-family: var(--font-body);
             overscroll-behavior-y: none;
+            width: 100%;
         }
         
         body.locked {
@@ -121,30 +126,29 @@
         #preloader.slide-up {
             transform: translateY(-100%);
         }
-        .preloader-logo {
+        .preloader-logo-wrapper {
+            position: relative;
             width: clamp(100px, 15vw, 150px);
-            opacity: 0;
-            filter: blur(8px);
-            animation: materialize 2.5s ease-out forwards;
+        }
+        .preloader-logo-base {
+            width: 100%;
+            display: block;
+            opacity: 0.15;
+        }
+        .preloader-logo-active {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: block;
+            clip-path: inset(0 100% 0 0);
         }
         .preloader-text {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             font-family: var(--font-display);
             color: var(--gold);
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: blinkText 1.5s infinite alternate;
-            animation-delay: 0.5s;
-        }
-        @keyframes materialize {
-            0% { opacity: 0; filter: blur(8px); transform: scale(0.9); }
-            100% { opacity: 1; filter: blur(0px); transform: scale(1); }
-        }
-        @keyframes blinkText {
-            0% { opacity: 0.2; }
-            100% { opacity: 1; }
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            letter-spacing: 0.1em;
         }
 
         /* CUSTOM CURSOR - MINIMALIST */
@@ -580,21 +584,21 @@
 
         /* GALLERY MARQUEE */
         .marquee-wrapper {
-            width: 110vw;
+            width: 110%;
             overflow: hidden;
             background: var(--gold);
             padding: 1rem 0;
             transform: rotate(-2deg);
             margin: var(--space-l) 0;
             position: relative;
-            left: -5vw;
+            left: -5%;
             z-index: 20;
         }
         .marquee {
             display: flex;
             white-space: nowrap;
             font-family: var(--font-display);
-            font-size: 3rem;
+            font-size: clamp(1.5rem, 5vw, 3rem);
             color: var(--bg-deep);
             text-transform: uppercase;
             animation: scrollText 20s linear infinite;
@@ -695,8 +699,11 @@
     <!-- FIX: Bloco 2 - Preloader com transição slide-up e etapas bem definidas -->
     <div id="preloader">
         <div style="display: flex; flex-direction: column; align-items: center;">
-            <img src="images/logo-branco.png" alt="Carregando..." class="preloader-logo">
-            <span class="preloader-text">Invocando...</span>
+            <div class="preloader-logo-wrapper">
+                <img src="images/logo-branco.png" alt="Logo base" class="preloader-logo-base">
+                <img src="images/logo-branco.png" alt="Logo carregando" class="preloader-logo-active" id="preloader-active-logo">
+            </div>
+            <span class="preloader-text" id="preloader-counter">0%</span>
         </div>
     </div>
 
@@ -984,14 +991,31 @@
                 preloader.style.display = 'none';
                 document.body.classList.remove('locked');
             } else {
-                // FIX: Bloco 2 - Etapa 2 de ~2.2s. Depois a Etapa 3 (slide-up cortina de 1s). Total ~3.2s
-                setTimeout(() => {
-                    preloader.classList.add('slide-up');
-                    setTimeout(() => {
-                        preloader.style.display = 'none'; // Removemos visualmente para liberar o pointer-events/z-index
-                        document.body.classList.remove('locked');
-                    }, 1000); // 1s para dar tempo da transição slide-up
-                }, 2200); 
+                const activeLogo = document.getElementById('preloader-active-logo');
+                const counter = document.getElementById('preloader-counter');
+                let progress = 0;
+                
+                const isDesktop = window.innerWidth > 768;
+                const speedMultiplier = isDesktop ? 0.7 : 2.5; // Mais lento no desktop, igual no mobile
+                
+                const interval = setInterval(() => {
+                    progress += Math.random() * speedMultiplier; // Avanço aleatório
+                    if (progress >= 100) progress = 100;
+                    
+                    counter.innerText = Math.floor(progress) + '%';
+                    activeLogo.style.clipPath = `inset(0 ${100 - progress}% 0 0)`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            preloader.classList.add('slide-up');
+                            setTimeout(() => {
+                                preloader.style.display = 'none';
+                                document.body.classList.remove('locked');
+                            }, 1000); // 1s de slide up
+                        }, 500); // Pausa dramática no 100%
+                    }
+                }, 60); // Intervalo de 60ms (Carregamento total ~4 a 5 segundos)
             }
         });
 
