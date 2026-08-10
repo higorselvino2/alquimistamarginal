@@ -329,6 +329,14 @@
             will-change: transform;
             transition: filter 0.8s ease;
         }
+        
+        @media (max-width: 768px) {
+            .hero-bg {
+                background-image: url('images/vertical image.jpg');
+                /* Desloca ligeiramente para baixo se o topo da imagem for muito vazio */
+                background-position: center center;
+            }
+        }
         .hero-content {
             position: relative;
             z-index: 10;
@@ -644,7 +652,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            * {
+            *:not(#preloader) {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
@@ -987,7 +995,7 @@
             // Removemos o atalho do prefersReducedMotion aqui para garantir que 
             // a introdução ritualística sempre rode (resolve o bug de sumir no desktop).
             const interval = setInterval(() => {
-                progress += Math.random() * 2; // Velocidade restaurada para o padrão (bom em ambos)
+                progress += Math.random() * 4; // Mais rápido (carregamento em torno de 2.5 a 3s)
                     if (progress >= 100) progress = 100;
                     
                     counter.innerText = Math.floor(progress) + '%';
