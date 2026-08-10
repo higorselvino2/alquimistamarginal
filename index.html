@@ -2,9 +2,31 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ALQUIMISTA MARGINAL | Ocupação Ritualística</title>
-    <meta name="description" content="A rua não é apenas referência estética, mas origem, método e território de criação.">
+    <meta name="description" content="A rua não é apenas referência estética, mas origem, método e território de criação. Projeto artístico-musical fundado em 2018 por Visão da Pandora e Martin Memo.">
+    
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://[DOMINIO-FINAL]/">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Alquimista Marginal | Ocupação Ritualística">
+    <meta property="og:description" content="A rua não é apenas referência estética, mas origem, método e território de criação. Projeto artístico-musical fundado em 2018 por Visão da Pandora e Martin Memo.">
+    <!-- TODO: substituir por imagem 1200x630 -->
+    <meta property="og:image" content="https://[DOMINIO-FINAL]/images/og-image.jpg">
+    <meta property="og:url" content="https://[DOMINIO-FINAL]/">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Alquimista Marginal">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alquimista Marginal | Ocupação Ritualística">
+    <meta name="twitter:description" content="A rua não é apenas referência estética, mas origem, método e território de criação.">
+    <!-- TODO: substituir por imagem 1200x630 -->
+    <meta name="twitter:image" content="https://[DOMINIO-FINAL]/images/og-image.jpg">
+    
+    <meta name="theme-color" content="#030303">
     
     <link rel="icon" type="image/png" href="images/favicon.png">
     
@@ -12,6 +34,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="preload" href="images/DSC01805.jpg" as="image">
 
     <style>
         :root {
@@ -37,38 +61,109 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* Custom cursor everywhere */
         }
 
-        html, body {
+        /* FIX: Bloco 1 - Condiciona o ocultamento do cursor à existência de mouse real no body */
+        body.has-fine-pointer * {
+            cursor: none !important;
+        }
+
+        html {
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        body {
             background-color: var(--bg-deep);
             color: var(--text-main);
             font-family: var(--font-body);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            overscroll-behavior-y: none;
+        }
+        
+        body.locked {
+            overflow: hidden;
         }
 
         ::selection {
             background: var(--gold);
             color: var(--bg-deep);
         }
+        
+        /* FIX: Bloco 3 - Ruído / Grain Effect */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        /* FIX: Bloco 2 - Preloader Ritualístico */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-deep);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1); /* Transição suave subindo */
+        }
+        #preloader.slide-up {
+            transform: translateY(-100%);
+        }
+        .preloader-logo {
+            width: clamp(100px, 15vw, 150px);
+            opacity: 0;
+            filter: blur(8px);
+            animation: materialize 2.5s ease-out forwards;
+        }
+        .preloader-text {
+            margin-top: 2rem;
+            font-family: var(--font-display);
+            color: var(--gold);
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: blinkText 1.5s infinite alternate;
+            animation-delay: 0.5s;
+        }
+        @keyframes materialize {
+            0% { opacity: 0; filter: blur(8px); transform: scale(0.9); }
+            100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+        }
+        @keyframes blinkText {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
 
-        /* CUSTOM CURSOR - THIN RING */
+        /* CUSTOM CURSOR - MINIMALIST */
         #custom-cursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 30px;
-            height: 30px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             border: 1px solid var(--gold);
             background-color: transparent;
             pointer-events: none;
-            z-index: 10000;
+            z-index: 100000;
             transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s, opacity 0.3s;
             mix-blend-mode: difference;
-            display: flex;
+            display: none;
+            opacity: 0; /* FIX: Bloco 1 - Começa invisível para não piscar no 0,0 */
             align-items: center;
             justify-content: center;
             font-family: var(--font-display);
@@ -78,15 +173,23 @@
             text-align: center;
         }
 
+        body.has-fine-pointer #custom-cursor {
+            display: flex;
+        }
+        
+        #custom-cursor.active-cursor {
+            opacity: 1;
+        }
+
         #custom-cursor.hover {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background-color: var(--orange);
             border-color: var(--orange);
             mix-blend-mode: normal;
         }
         #custom-cursor.hover::after {
-            content: "ENTRAR";
+            content: attr(data-text);
         }
 
         /* TYPOGRAPHY */
@@ -97,7 +200,7 @@
         }
 
         .manifesto {
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(2.5rem, 8vw, 6rem);
             color: var(--gold);
             display: block;
             margin: var(--space-m) 0;
@@ -162,8 +265,15 @@
         img {
             max-width: 100%;
             display: block;
+            height: auto;
             filter: grayscale(100%) contrast(1.3);
         }
+        
+        /* FIX: Bloco 3 - Hover reveal colors (Removido a pedido: todas as imagens em P&B) */
+        .hover-color, img.hover-color {
+            filter: grayscale(100%) contrast(1.2);
+        }
+
         
         /* OVERLAPPING LOGO BG */
         .bg-logo {
@@ -178,6 +288,10 @@
         @keyframes rotateSlow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+        
+        .animation-paused {
+            animation-play-state: paused !important;
         }
 
         /* REVEAL ANIMATIONS */
@@ -194,6 +308,7 @@
         /* HERO */
         .hero {
             height: 100vh;
+            height: 100svh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -212,49 +327,87 @@
             filter: grayscale(100%) contrast(1.5);
             opacity: 0.6;
             z-index: 1;
-            /* Parallax target */
             will-change: transform;
+            transition: filter 0.8s ease;
         }
         .hero-content {
             position: relative;
             z-index: 10;
             text-align: center;
             mix-blend-mode: difference;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        
+        /* FIX: Bloco 4 - Ajuste de escala e hierarquia da logo no Hero */
         .hero-logo {
-            width: clamp(100px, 20vw, 250px);
-            margin: 0 auto var(--space-s);
-            filter: invert(1);
+            width: clamp(70px, 15vw, 120px);
+            margin: 0 auto 1.5rem;
         }
+        
+        .alchemical-divider {
+            width: 2px;
+            height: clamp(20px, 5vw, 40px);
+            background: var(--gold);
+            margin: 0 auto 1.5rem;
+        }
+        
+        .hero-tagline {
+            font-family: var(--font-body);
+            color: var(--gold);
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-top: 1rem;
+        }
+
         .hero h1 {
-            font-size: clamp(4rem, 15vw, 12rem);
+            font-size: clamp(3.5rem, 15vw, 12rem);
             color: #fff;
-            margin-bottom: -1rem;
+            margin: 0;
+            line-height: 0.8;
         }
 
         /* QUEM SOMOS */
         .about-images {
             position: relative;
-            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
         }
         .about-images img {
-            position: absolute;
-            box-shadow: 15px 15px 0 var(--gold);
+            width: 90%;
+            box-shadow: 10px 10px 0 var(--gold);
         }
-        .about-images img:nth-child(1) {
-            width: 80%;
-            top: 0;
-            left: 0;
-            transform: rotate(-3deg);
-            z-index: 2;
-        }
-        .about-images img:nth-child(2) {
-            width: 60%;
-            bottom: -50px;
-            right: 0;
-            transform: rotate(5deg);
-            z-index: 1;
-            border: 4px solid var(--bg-deep);
+        
+        @media(min-width: 768px) {
+            .about-images {
+                height: 60vh;
+                display: block;
+                margin-top: 0;
+            }
+            .about-images img {
+                position: absolute;
+                box-shadow: 15px 15px 0 var(--gold);
+            }
+            .about-images img:nth-child(1) {
+                width: 80%;
+                top: 0;
+                left: 0;
+                transform: rotate(-3deg);
+                z-index: 2;
+            }
+            .about-images img:nth-child(2) {
+                width: 60%;
+                bottom: -50px;
+                right: 0;
+                transform: rotate(5deg);
+                z-index: 1;
+                border: 4px solid var(--bg-deep);
+            }
         }
 
         /* CONVOCAÇÕES MANIFESTO GRID */
@@ -366,7 +519,7 @@
         .btn {
             display: inline-block;
             border: 2px solid var(--gold);
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.4rem; 
             font-family: var(--font-display);
             font-size: 1.5rem;
             color: var(--gold);
@@ -408,10 +561,11 @@
         }
         .links a {
             display: inline-block;
-            margin: 0 1rem;
+            margin: 0.5rem 1rem;
             font-family: var(--font-display);
             font-size: 2rem;
             transition: color 0.3s;
+            padding: 0.5rem;
         }
         .links a:hover {
             color: var(--orange);
@@ -426,7 +580,7 @@
 
         /* GALLERY MARQUEE */
         .marquee-wrapper {
-            width: 100vw;
+            width: 110vw;
             overflow: hidden;
             background: var(--gold);
             padding: 1rem 0;
@@ -434,7 +588,6 @@
             margin: var(--space-l) 0;
             position: relative;
             left: -5vw;
-            width: 110vw;
             z-index: 20;
         }
         .marquee {
@@ -454,39 +607,115 @@
 
         /* MASONRY IMAGE GRID (EXTRA IMAGES) */
         .masonry {
-            column-count: 2;
-            column-gap: 1rem;
+            column-count: 1;
+            column-gap: 2rem;
             margin-top: var(--space-m);
         }
+        @media(min-width: 480px) { .masonry { column-count: 2; } }
         @media(min-width: 768px) { .masonry { column-count: 3; } }
-        .masonry img {
-            width: 100%;
-            margin-bottom: 1rem;
-            border: 2px solid #222;
-            transition: filter 0.3s, border-color 0.3s;
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 2rem;
+            position: relative;
         }
-        .masonry img:hover {
-            border-color: var(--gold);
-            filter: grayscale(0);
+        
+        .masonry-item img {
+            width: 100%;
+            border: 5px solid #111;
+            transition: filter 0.6s, border-color 0.3s;
+        }
+        
+        .masonry-item:nth-child(even) { transform: rotate(2deg); }
+        .masonry-item:nth-child(3n) { transform: rotate(-3deg); }
+
+        /* FIX: Bloco 3 - Washi tape texture para estilo fanzine */
+        .washi-tape::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-4deg);
+            width: 80px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            z-index: 5;
+            backdrop-filter: blur(2px);
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .hero-bg {
+                transform: none !important;
+            }
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
     </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicGroup",
+      "name": "Alquimista Marginal",
+      "description": "Projeto artístico-musical na intersecção entre música, performance, espiritualidade urbana e cultura de rua.",
+      "url": "https://[DOMINIO-FINAL]/",
+      "genre": ["Hip-Hop", "Rock", "House"],
+      "sameAs": [
+        "https://instagram.com/alquimistamarginal",
+        "https://www.youtube.com/@alquimistamarginal"
+      ],
+      "member": [
+        {
+          "@type": "Person",
+          "name": "Visão da Pandora",
+          "alternateName": "DJ Ouro"
+        },
+        {
+          "@type": "Person",
+          "name": "Martin Memo"
+        }
+      ]
+    }
+    </script>
 </head>
-<body>
+<body class="locked">
+    
+    <!-- FIX: Bloco 3 - Ruído / Grain Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- FIX: Bloco 2 - Preloader com transição slide-up e etapas bem definidas -->
+    <div id="preloader">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <img src="images/logo-branco.png" alt="Carregando..." class="preloader-logo">
+            <span class="preloader-text">Invocando...</span>
+        </div>
+    </div>
 
     <!-- CUSTOM CURSOR DIV -->
     <div id="custom-cursor"></div>
 
     <!-- HERO -->
-    <section class="hero hover-trigger">
+    <section class="hero hover-trigger" data-cursor-text="RITUAL">
         <div class="hero-bg" id="hero-bg"></div>
         <div class="hero-content">
-            <img src="images/logo-branco.png" alt="Logo" class="hero-logo">
+            <!-- FIX: Bloco 4 - Hierarquia Logo -> Divider -> H1 -> Tagline -->
+            <img src="images/logo-branco.png" alt="Logo da Alquimista Marginal" class="hero-logo" width="200" height="200" loading="eager" fetchpriority="high">
+            <div class="alchemical-divider reveal"></div>
             <h1 class="reveal">ALQUIMISTA<br>MARGINAL</h1>
+            <p class="hero-tagline reveal">A RUA COMO MÉTODO</p>
         </div>
     </section>
 
-    <div class="marquee-wrapper">
+    <div class="marquee-wrapper pause-out-of-view">
         <div class="marquee">
             <span>RITUALIDADE CONTEMPORÂNEA ✦</span>
             <span>A RUA COMO ORIGEM ✦</span>
@@ -501,7 +730,7 @@
 
     <!-- QUEM SOMOS -->
     <section class="section" id="institucional">
-        <img src="images/logo.png" class="bg-logo" style="top: 10%; right: -10%;">
+        <img src="images/logo.png" alt="Logo de fundo" class="bg-logo pause-out-of-view" style="top: 10%; right: -10%;" width="800" height="800" loading="lazy" decoding="async">
         <div class="container">
             <div class="grid-split offset">
                 <div class="reveal">
@@ -513,10 +742,10 @@
                         Idealizado por Visão da Pandora (MC / DJ OURO) e Martin Memo (MC), o projeto nasce de forma totalmente underground, com o propósito de ativar e expandir a alquimia urbana como prática artística, cultural e coletiva.
                     </div>
                 </div>
-                <div class="about-images reveal hover-trigger">
-                    <!-- Hands up photo + Live mic photo -->
-                    <img src="images/DSC01811.jpg" alt="Show Ao Vivo">
-                    <img src="images/979cb390-bc46-4eb4-9411-586b634c3060.png" alt="Presença">
+                <div class="about-images reveal hover-trigger" data-cursor-text="VER">
+                    <!-- FIX: Bloco 3 - Hover Color -->
+                    <img src="images/DSC01811.jpg" alt="Visão da Pandora cantando ao vivo com as mãos levantadas para o público" width="800" height="533" loading="lazy" decoding="async" class="hover-color">
+                    <img src="images/979cb390-bc46-4eb4-9411-586b634c3060.png" alt="Martin Memo se apresentando intensamente no palco com microfone" width="800" height="533" loading="lazy" decoding="async" class="hover-color">
                 </div>
             </div>
 
@@ -527,8 +756,8 @@
                         A Alquimista Marginal não se limita a um formato fixo. Suas apresentações funcionam como ocupações artísticas, onde som, palavra, corpo e presença constroem atmosferas intensas, imersivas e impactantes. Cada aparição do projeto é pensada como um acontecimento, capaz de transformar o espaço e a percepção do público.
                     </div>
                 </div>
-                <div class="reveal hover-trigger">
-                    <img src="images/e003b6f0-fde8-44e1-be4f-addebdecceff.png" alt="Atmosfera" style="box-shadow: -15px 15px 0 var(--orange); transform: rotate(2deg);">
+                <div class="reveal hover-trigger" data-cursor-text="VER">
+                    <img src="images/e003b6f0-fde8-44e1-be4f-addebdecceff.png" alt="Fotografia de atmosfera do show ao vivo com luzes vermelhas" width="800" height="533" loading="lazy" decoding="async" style="box-shadow: -15px 15px 0 var(--orange); transform: rotate(2deg);" class="hover-color">
                 </div>
             </div>
         </div>
@@ -540,36 +769,36 @@
             <h2 class="text-huge reveal rotate-left">RITUAIS &<br>CONVOCAÇÕES</h2>
             
             <div class="convocacoes-grid">
-                <div class="convocacao-block reveal rotate-right hover-trigger">
+                <div class="convocacao-block reveal rotate-right hover-trigger" data-cursor-text="LIGAR">
                     <p>"A rua não é apenas referência estética, mas origem, método e território de criação."</p>
                 </div>
-                <div class="convocacao-block reveal rotate-left hover-trigger">
+                <div class="convocacao-block reveal rotate-left hover-trigger" data-cursor-text="SENTIR">
                     <p>"Suas apresentações funcionam como ocupações artísticas, onde som, palavra, corpo e presença constroem atmosferas intensas, imersivas e impactantes."</p>
                 </div>
-                <div class="convocacao-block reveal hover-trigger">
+                <div class="convocacao-block reveal hover-trigger" data-cursor-text="ESTAR">
                     <p>"Cada aparição do projeto é pensada como um acontecimento, capaz de transformar o espaço e a percepção do público."</p>
                 </div>
-                <div class="convocacao-block reveal rotate-right hover-trigger">
+                <div class="convocacao-block reveal rotate-right hover-trigger" data-cursor-text="VIVER">
                     <p>"No Cálice, não há hierarquia entre participantes: cada elemento, cada linguagem, cada presença é parte viva do rito coletivo."</p>
                 </div>
             </div>
             
             <div class="reveal" style="text-align: center; margin-top: var(--space-m);">
-                <a href="https://instagram.com/alquimistamarginal" target="_blank" class="btn hover-trigger">Acompanhe no Instagram</a>
+                <a href="https://instagram.com/alquimistamarginal" target="_blank" class="btn hover-trigger" data-cursor-text="SEGUIR">Acompanhe no Instagram</a>
             </div>
         </div>
     </section>
 
     <!-- ARTISTAS -->
     <section class="section" id="artistas">
-        <img src="images/logo.png" class="bg-logo" style="top: 30%; left: -20%; opacity: 0.03;">
+        <img src="images/logo.png" alt="Logo de fundo esmaecido" class="bg-logo pause-out-of-view" style="top: 30%; left: -20%; opacity: 0.03;" width="800" height="800" loading="lazy" decoding="async">
         <div class="container">
             
             <!-- Visão da Pandora -->
             <div class="grid-split push-down" style="margin-bottom: var(--space-l);">
-                <div class="artista-foto reveal hover-trigger">
-                    <!-- Foto corrigida -->
-                    <img src="images/088bdb35-2e4a-49ed-9d51-d3e72039dd07.png" alt="Visão da Pandora">
+                <div class="artista-foto reveal hover-trigger" data-cursor-text="PANDORA">
+                    <!-- FIX: Bloco 3 - Hover reveal colors aplicados nas fotos principais dos artistas -->
+                    <img src="images/088bdb35-2e4a-49ed-9d51-d3e72039dd07.png" alt="Retrato artístico de Visão da Pandora com iluminação amarelada" width="800" height="800" loading="lazy" decoding="async" class="hover-color">
                 </div>
                 <div class="reveal">
                     <h2 class="text-huge">VISÃO DA<br>PANDORA</h2>
@@ -584,12 +813,11 @@
             </div>
 
             <!-- DJ OURO -->
-            <div class="projeto-box reveal hover-trigger" style="max-width: 900px; margin: 0 auto var(--space-l);">
+            <div class="projeto-box reveal hover-trigger" data-cursor-text="OUVIR" style="max-width: 900px; margin: 0 auto var(--space-l);">
                 <div class="badge">DJ ∅UR∅</div>
                 <div class="grid-split" style="gap: 2rem;">
-                    <!-- Adicionando a imagem correta do projeto DJ Ouro -->
                     <div class="artista-foto">
-                        <img src="images/0c13100d-52f9-4ba1-9ba1-b8be2a1843c6.png" alt="DJ Ouro">
+                        <img src="images/0c13100d-52f9-4ba1-9ba1-b8be2a1843c6.png" alt="Fotografia de DJ Ouro operando as pick-ups num palco escuro" width="800" height="800" loading="lazy" decoding="async" class="hover-color">
                     </div>
                     <div class="text-block" style="border-left-color: var(--gold); max-width: 100%;">
                         DJ ∅UR∅ é a persona sonora de Visão da Pandora, transformando pistas em experiências únicas. Misturando hip-hop, house e sets experimentais, cria uma atmosfera onde a rua encontra o palco. Como integrante do coletivo, ∅UR∅ conecta arte, resistência cultural e expressão de rua. Seus sets são reconhecidos por sua originalidade e capacidade de surpreender.
@@ -599,8 +827,8 @@
 
             <!-- Martin Memo -->
             <div class="grid-split reverse push-down">
-                <div class="artista-foto reveal hover-trigger rotate-left">
-                    <img src="images/felipebenici0_RAPHOUR_28NOV-8084.jpg" alt="Martin Memo">
+                <div class="artista-foto reveal hover-trigger rotate-left" data-cursor-text="MEMO">
+                    <img src="images/felipebenici0_RAPHOUR_28NOV-8084.jpg" alt="Retrato expressivo de Martin Memo no palco iluminado de vermelho" width="800" height="800" loading="lazy" decoding="async" class="hover-color">
                 </div>
                 <div class="reveal">
                     <h2 class="text-huge" style="color: var(--orange);">MARTIN<br>MEMO</h2>
@@ -616,8 +844,21 @@
 
         </div>
     </section>
+    
+    <!-- FIX: Bloco 3 - Respiro visual / Citação isolada com ícone alquímico -->
+    <section class="section">
+        <div class="container text-center reveal">
+            <svg viewBox="0 0 100 100" width="40" style="fill: var(--gold); margin: 0 auto 2rem auto; display: block;">
+                <!-- Símbolo Alquímico (Estilizado) -->
+                <path d="M50 5 L95 95 L5 95 Z M50 25 L80 85 L20 85 Z M50 40 L65 75 L35 75 Z" />
+            </svg>
+            <h3 class="manifesto alt" style="font-size: clamp(2rem, 5vw, 3.5rem); max-width: 1000px; margin: 0 auto; line-height: 1.1;">
+                "Cada beat e cada verso são carregados de presença, discurso urbano e identidade forte."
+            </h3>
+        </div>
+    </section>
 
-    <div class="marquee-wrapper" style="transform: rotate(2deg); background: var(--orange);">
+    <div class="marquee-wrapper pause-out-of-view" style="transform: rotate(2deg); background: var(--orange);">
         <div class="marquee">
             <span>RESISTÊNCIA E AUTONOMIA NO HIP HOP ✦</span>
             <span>A ARTE SE TRANSFORMA EM POTÊNCIA COLETIVA ✦</span>
@@ -633,7 +874,7 @@
             <!-- Quero Zine -->
             <div class="grid-split" style="margin-bottom: var(--space-l);">
                 <div class="reveal">
-                    <img src="images/quero_zine_logo.png" alt="Quero Zine" style="height: 80px; filter: invert(1); margin-bottom: 2rem;">
+                    <img src="images/quero_zine_logo.png" alt="Logotipo do projeto Quero Zine" style="height: 80px; width: auto; filter: invert(1); margin-bottom: 2rem;" loading="lazy" decoding="async">
                     <span class="manifesto" style="font-size: 3rem; margin: 0 0 2rem 0;">O FANZINE COMO TECNOLOGIA SOCIAL E POLÍTICA.</span>
                     <div class="text-block">
                         O Quero Zine é um projeto editorial e formativo independente criado em 2018. Nascido do encontro entre poesia marginal, fanzine, rap e intervenção urbana, utiliza a publicação independente como ferramenta de expressão, formação e circulação de narrativas que historicamente não encontram espaço nos meios tradicionais.
@@ -642,8 +883,9 @@
                         As ações já passaram por escolas, Fundação Casa, ocupações artísticas e SESC. Mais do que uma publicação, o Quero Zine é um território de encontro.
                     </div>
                 </div>
-                <div class="reveal hover-trigger rotate-right">
-                    <img src="images/zine_tela.jpg" alt="Zine e Crianças" style="box-shadow: 15px -15px 0 #fff;">
+                <div class="reveal hover-trigger rotate-right" data-cursor-text="ZINE">
+                    <!-- FIX: Bloco 3 - Hover Color na colagem do Zine -->
+                    <img src="images/zine_tela.jpg" alt="Zine sendo lido por crianças em uma oficina" width="800" height="533" loading="lazy" decoding="async" style="box-shadow: 15px -15px 0 #fff;" class="hover-color">
                 </div>
             </div>
 
@@ -659,28 +901,41 @@
                         O projeto valoriza o que é resistente ao tempo e às tendências, legitimando práticas urbanas muitas vezes ignoradas. Não há hierarquia entre participantes: cada elemento, cada linguagem, cada presença é parte viva do rito coletivo.
                     </div>
                 </div>
-                <div class="reveal hover-trigger rotate-left">
-                    <!-- Utilizando o logo branco como elemento visual placeholder limpo, já que o cartaz foi movido pra galera visual -->
-                    <img src="images/logo-branco.png" alt="Cálice da Arte" style="width: 200px; margin: 0 auto; opacity: 0.5;">
+                <div class="reveal hover-trigger rotate-left" data-cursor-text="RITO">
+                    <img src="images/logo-branco.png" alt="Logotipo Cálice da Arte" width="200" height="200" loading="lazy" decoding="async" style="width: 200px; margin: 0 auto; opacity: 0.5;">
                 </div>
             </div>
 
         </div>
     </section>
 
-    <!-- GALERIA DE PRESENÇA E CARTAZES (IMAGENS EXTRAS DA PASTA) -->
+    <!-- GALERIA DE PRESENÇA E CARTAZES -->
     <section class="section">
         <div class="container">
             <h2 class="text-huge reveal">ARQUIVO / PRESENÇA</h2>
-            <div class="masonry reveal hover-trigger">
-                <!-- Todas as imagens excedentes e cartazes realocados para formar registro visual histórico -->
-                <img src="images/Design_sem_nome_(4).png" alt="Arquivo visual">
-                <img src="images/LLL.png" alt="Arquivo visual">
-                <img src="images/d0966068-1970-4af6-ba66-d4db78b0db05.png" alt="Soul Marginal Flyer">
-                <img src="images/730511083_18608973898031516_5972655244872701118_n.jpg" alt="Arquivo visual">
-                <img src="images/SnapInsta.to_541521025_17889789627342933_264079260889585532_n.jpg" alt="Arquivo visual">
-                <img src="images/741523998_18579084592067652_3312034726951573324_n.webp" alt="Arquivo visual">
-                <img src="images/766168917_17938163880342933_2041897178445232918_n.webp" alt="Arquivo visual">
+            <div class="masonry reveal hover-trigger" data-cursor-text="ARQUIVO">
+                <!-- FIX: Bloco 3 - Washi tape, rotações na grade e cores aplicadas estrategicamente. -->
+                <div class="masonry-item washi-tape">
+                    <img src="images/Design_sem_nome_(4).png" alt="Colagem artística do arquivo visual" width="600" height="800" loading="lazy" decoding="async" class="hover-color">
+                </div>
+                <div class="masonry-item">
+                    <img src="images/LLL.png" alt="Cartaz promocional evento LLL" width="600" height="800" loading="lazy" decoding="async" class="hover-color">
+                </div>
+                <div class="masonry-item washi-tape">
+                    <img src="images/d0966068-1970-4af6-ba66-d4db78b0db05.png" alt="Cartaz do evento Soul Marginal" width="600" height="800" loading="lazy" decoding="async" class="hover-color">
+                </div>
+                <div class="masonry-item">
+                    <img src="images/730511083_18608973898031516_5972655244872701118_n.jpg" alt="Foto antiga estilo polaroid da ocupação" width="600" height="600" loading="lazy" decoding="async">
+                </div>
+                <div class="masonry-item washi-tape">
+                    <img src="images/SnapInsta.to_541521025_17889789627342933_264079260889585532_n.jpg" alt="Registro fotográfico de ensaio urbano na rua" width="600" height="600" loading="lazy" decoding="async">
+                </div>
+                <div class="masonry-item">
+                    <img src="images/741523998_18579084592067652_3312034726951573324_n.webp" alt="Visão da Pandora interagindo com público em evento noturno" width="600" height="600" loading="lazy" decoding="async" class="hover-color">
+                </div>
+                <div class="masonry-item washi-tape">
+                    <img src="images/766168917_17938163880342933_2041897178445232918_n.webp" alt="Martin Memo no microfone" width="600" height="600" loading="lazy" decoding="async" class="hover-color">
+                </div>
             </div>
         </div>
     </section>
@@ -691,11 +946,11 @@
             <h2 class="text-huge reveal">SINTONIZE</h2>
             
             <div class="reveal" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: var(--space-m);">
-                <a href="https://www.youtube.com/@alquimistamarginal" target="_blank" class="btn hover-trigger">
+                <a href="https://www.youtube.com/@alquimistamarginal" target="_blank" class="btn hover-trigger" data-cursor-text="ASSISTIR">
                     <svg style="width: 24px; height: 24px; vertical-align: middle; margin-right: 10px; fill: currentColor;" viewBox="0 0 24 24"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4s-6.254,0-7.814,0.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.746,20,12,20,12,20s6.254,0,7.814-0.418c0.86-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M9.999,15.595V8.405L16.273,12L9.999,15.595z"/></svg>
                     Youtube
                 </a>
-                <a href="#" class="btn hover-trigger" style="border-color: var(--orange); color: var(--orange);">Merchandising</a>
+                <a href="#" class="btn hover-trigger" style="border-color: var(--orange); color: var(--orange);" data-cursor-text="LOJA">Merchandising</a>
             </div>
             
         </div>
@@ -704,10 +959,10 @@
     <!-- FOOTER -->
     <footer>
         <div class="container reveal">
-            <img src="images/logo.png" alt="Estrela 8 Pontas" class="footer-logo">
+            <img src="images/logo.png" alt="Estrela 8 Pontas" class="footer-logo pause-out-of-view" width="80" height="80" loading="lazy">
             <div class="links" style="margin-bottom: 2rem;">
-                <a href="https://instagram.com/alquimistamarginal" class="hover-trigger" target="_blank">INSTAGRAM</a>
-                <a href="mailto:alquimistamarginal@gmail.com" class="hover-trigger">ALQUIMISTAMARGINAL@GMAIL.COM</a>
+                <a href="https://instagram.com/alquimistamarginal" class="hover-trigger" target="_blank" data-cursor-text="INSTA">INSTAGRAM</a>
+                <a href="mailto:alquimistamarginal@gmail.com" class="hover-trigger" data-cursor-text="MAIL">ALQUIMISTAMARGINAL@GMAIL.COM</a>
             </div>
             <p style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
                 ALQUIMISTA MARGINAL © 2026. A rua como método.
@@ -717,56 +972,145 @@
 
     <script>
         // ==========================================
-        // CUSTOM CURSOR LOGIC
+        // PRELOADER & REDUCED MOTION
         // ==========================================
-        const cursor = document.getElementById('custom-cursor');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        const setupHoverTriggers = () => {
-            const triggers = document.querySelectorAll('.hover-trigger, a, button');
-            triggers.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-            });
-        };
-
-        // ==========================================
-        // PARALLAX EFFECT
-        // ==========================================
-        const heroBg = document.getElementById('hero-bg');
-        window.addEventListener('scroll', () => {
-            const scroll = window.scrollY;
-            if(heroBg && scroll < window.innerHeight) {
-                heroBg.style.transform = `translateY(${scroll * 0.4}px)`;
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            
+            if (prefersReducedMotion) {
+                // Remove imediato se houver preferência por menos animações
+                preloader.style.display = 'none';
+                document.body.classList.remove('locked');
+            } else {
+                // FIX: Bloco 2 - Etapa 2 de ~2.2s. Depois a Etapa 3 (slide-up cortina de 1s). Total ~3.2s
+                setTimeout(() => {
+                    preloader.classList.add('slide-up');
+                    setTimeout(() => {
+                        preloader.style.display = 'none'; // Removemos visualmente para liberar o pointer-events/z-index
+                        document.body.classList.remove('locked');
+                    }, 1000); // 1s para dar tempo da transição slide-up
+                }, 2200); 
             }
         });
 
         // ==========================================
-        // INTERSECTION OBSERVER (REVEAL)
+        // CUSTOM CURSOR LOGIC 
         // ==========================================
-        const initReveal = () => {
+        const cursor = document.getElementById('custom-cursor');
+        const isHoverSupported = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        
+        if (isHoverSupported && !prefersReducedMotion) {
+            // FIX: Bloco 1 - Restaura o cursor aplicando a classe responsável apenas depois do match
+            document.body.classList.add('has-fine-pointer');
+            
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            let cursorVisible = false;
+
+            document.addEventListener('mousemove', (e) => {
+                if (!cursorVisible) {
+                    cursor.classList.add('active-cursor');
+                    cursorVisible = true;
+                }
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // LERP effect
+            const updateCursor = () => {
+                cursorX += (mouseX - cursorX) * 0.15;
+                cursorY += (mouseY - cursorY) * 0.15;
+                
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+                
+                requestAnimationFrame(updateCursor);
+            };
+            requestAnimationFrame(updateCursor);
+
+            const setupHoverTriggers = () => {
+                const triggers = document.querySelectorAll('.hover-trigger, a, button');
+                triggers.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        cursor.classList.add('hover');
+                        const text = el.getAttribute('data-cursor-text') || 'ENTRAR';
+                        cursor.setAttribute('data-text', text);
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        cursor.classList.remove('hover');
+                        cursor.removeAttribute('data-text');
+                    });
+                });
+            };
+            setupHoverTriggers();
+        }
+
+        // ==========================================
+        // PARALLAX EFFECT 
+        // ==========================================
+        const heroBg = document.getElementById('hero-bg');
+        let scrollY = 0;
+        let ticking = false;
+
+        const updateParallax = () => {
+            if (heroBg && scrollY < window.innerHeight && !prefersReducedMotion) {
+                heroBg.style.transform = `translate3d(0, ${scrollY * 0.4}px, 0)`;
+            }
+            ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+            if (!ticking) {
+                window.requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        });
+
+        // ==========================================
+        // INTERSECTION OBSERVERS
+        // ==========================================
+        const initObservers = () => {
+            // 1. Reveal Elements
             const reveals = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if(entry.isIntersecting) {
                         entry.target.classList.add('active');
+                        observer.unobserve(entry.target); 
                     }
                 });
             }, {
                 threshold: 0.1,
                 rootMargin: "0px 0px -50px 0px"
             });
-            reveals.forEach(r => observer.observe(r));
+            
+            if (!prefersReducedMotion) {
+                reveals.forEach(r => revealObserver.observe(r));
+            } else {
+                reveals.forEach(r => r.classList.add('active'));
+            }
+
+            // 2. Pause Animations when out of view
+            const pauseElements = document.querySelectorAll('.pause-out-of-view');
+            const pauseObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('animation-paused');
+                    } else {
+                        entry.target.classList.add('animation-paused');
+                    }
+                });
+            }, { threshold: 0 });
+            
+            pauseElements.forEach(el => pauseObserver.observe(el));
         };
 
         // INIT
         document.addEventListener('DOMContentLoaded', () => {
-            setupHoverTriggers();
-            initReveal();
+            initObservers();
         });
 
     </script>
