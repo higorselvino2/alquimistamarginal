@@ -68,12 +68,8 @@
             cursor: none !important;
         }
 
-        html, body {
-            overflow-x: hidden;
-            max-width: 100%;
-        }
-
         html {
+            overflow-x: hidden;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -83,7 +79,6 @@
             color: var(--text-main);
             font-family: var(--font-body);
             overscroll-behavior-y: none;
-            width: 100%;
         }
         
         body.locked {
@@ -985,21 +980,14 @@
         
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
+            const activeLogo = document.getElementById('preloader-active-logo');
+            const counter = document.getElementById('preloader-counter');
+            let progress = 0;
             
-            if (prefersReducedMotion) {
-                // Remove imediato se houver preferência por menos animações
-                preloader.style.display = 'none';
-                document.body.classList.remove('locked');
-            } else {
-                const activeLogo = document.getElementById('preloader-active-logo');
-                const counter = document.getElementById('preloader-counter');
-                let progress = 0;
-                
-                const isDesktop = window.innerWidth > 768;
-                const speedMultiplier = isDesktop ? 0.7 : 2.5; // Mais lento no desktop, igual no mobile
-                
-                const interval = setInterval(() => {
-                    progress += Math.random() * speedMultiplier; // Avanço aleatório
+            // Removemos o atalho do prefersReducedMotion aqui para garantir que 
+            // a introdução ritualística sempre rode (resolve o bug de sumir no desktop).
+            const interval = setInterval(() => {
+                progress += Math.random() * 2; // Velocidade restaurada para o padrão (bom em ambos)
                     if (progress >= 100) progress = 100;
                     
                     counter.innerText = Math.floor(progress) + '%';
@@ -1016,7 +1004,6 @@
                         }, 500); // Pausa dramática no 100%
                     }
                 }, 60); // Intervalo de 60ms (Carregamento total ~4 a 5 segundos)
-            }
         });
 
         // ==========================================
